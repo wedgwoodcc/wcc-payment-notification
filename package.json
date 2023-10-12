@@ -2,14 +2,16 @@
   "name": "wcc-payment-notification",
   "version": "1.0.0",
   "description": "",
-  "main": "handler.ts",
+  "main": "api/handler.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "vercel": "^32.4.1"
+  "devDependencies": {
+    "@types/node": "^20.8.4",
+    "@vercel/node": "^3.0.7",
+    "typescript": "^5.2.2"
   }
 }
