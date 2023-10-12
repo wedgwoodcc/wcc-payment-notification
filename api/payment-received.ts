@@ -9,7 +9,7 @@ export default async function handler(
     //const { name = 'World' } = req.query
 
     try {
-        await sql`insert into paypal_notification(body, received_on) values ('${req.body}', ${new Date(Date.now()).toISOString()});`;
+        await sql`insert into paypal_notification(body, received_on) values ('${req.body}', '${new Date(Date.now()).toISOString()}');`;
     } catch (error) {
         return res.status(500).json({ error })
     }
