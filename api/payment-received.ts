@@ -1,23 +1,37 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sql } from '@vercel/postgres';
+import { createKysely } from '@vercel/postgres-kysely';
+import type { Database } from '../lib/kysely.types';
+import { verifyPaypalRequest } from '../lib/verify_paypal_request';
 
 export default async function handler(
-    req: VercelRequest, 
+    req: VercelRequest,
     res: VercelResponse
 ) {
-    
-    //const { name = 'World' } = req.query
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed, use POST' })
+    }
 
     try {
-        await sql`insert into paypal_notification(body, received_on) values ('${req.body}', '${new Date(Date.now()).toISOString()}');`;
+
+        if (!await verifyPaypalRequest(req)) {
+            return res.status(400).json({ error: 'Invalid request' });
+        }
+
+        const db = createKysely<Database>();
+
+        await db
+            .insertInto('paypal_notification')
+            .values({
+                body: JSON.stringify(req.body),
+                received_on: new Date(Date.now()).toISOString()
+            })
+            .execute();
+
     } catch (error) {
         return res.status(500).json({ error })
     }
 
-    // change this if an error occurs
-    res.status(200)
-
-    return res.json({
+    return res.status(200).json({
         message: `Message received!`,
     })
 }
