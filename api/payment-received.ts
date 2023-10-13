@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createKysely } from '@vercel/postgres-kysely';
 import type { Database } from '../lib/kysely.types';
-import { verifyPaypalRequest } from '../lib/verify_paypal_request';
+// import { verifyPaypalRequest } from '../lib/verify_paypal_request';
 
 export default async function handler(
     req: VercelRequest,
@@ -13,9 +13,9 @@ export default async function handler(
 
     try {
 
-        if (!await verifyPaypalRequest(req)) {
-            return res.status(400).json({ error: 'Invalid request' });
-        }
+        // if (!await verifyPaypalRequest(req)) {
+        //     return res.status(400).json({ error: 'Invalid request' });
+        // }
 
         const db = createKysely<Database>();
 
